@@ -1,0 +1,22 @@
+name: Monitor Availability S2PEP-UNM
+
+on:
+  schedule:
+    - cron: "0 * * * *"   # setiap jam
+  workflow_dispatch:       # bisa juga dijalankan manual
+
+jobs:
+  check_site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cek ketersediaan laman
+        run: |
+          echo "Waktu pengujian: $(date)" >> log.txt
+          curl -Is http://s2pep-unm.com | head -n 1 >> log.txt
+          echo "" >> log.txt
+
+      - name: Upload hasil log
+        uses: actions/upload-artifact@v4
+        with:
+          name: hasil-log
+          path: log.txt
